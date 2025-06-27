@@ -21,8 +21,8 @@ public class PaymentController {
     private final PaymentServiceImpl paymentService;
 
 
-    @GetMapping("_{eventId}/total")
-    public ResponseEntity<Map<String, Object>> calculateEventTotal(@PathVariable Integer eventId, @RequestParam int page, @RequestParam int size) {
+    @GetMapping("/{id}/total")
+    public ResponseEntity<Map<String, Object>> calculateEventTotal(@PathVariable("id") Integer eventId) {
         List<PaymentResultDto> payments = paymentService.calculate(eventId);
 
         BigDecimal totalSpent = payments.stream()
@@ -44,5 +44,5 @@ public class PaymentController {
 
 
 
-    //
+
 }

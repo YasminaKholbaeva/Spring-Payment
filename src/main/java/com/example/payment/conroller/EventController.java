@@ -2,11 +2,13 @@ package com.example.payment.conroller;
 
 import com.example.payment.dto.EventDto;
 import com.example.payment.model.Event;
+import com.example.payment.model.Participant;
 import com.example.payment.repository.EventRepository;
 import com.example.payment.repository.ParticipantRepository;
 import com.example.payment.service.impl.EventServiceImpl;
 import com.example.payment.service.impl.PaymentServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,11 +16,12 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/event")
+@RequestMapping("/api/v1/events")
 @RequiredArgsConstructor
 public class EventController {
 
-    private EventServiceImpl eventService;
+    private final EventServiceImpl eventService;
+    private final ParticipantRepository participantRepository;
 
     @PostMapping
     public ResponseEntity<EventDto> createEvent(@RequestBody EventDto dto) {
@@ -36,13 +39,10 @@ public class EventController {
         return ResponseEntity.ok(Map.of("result", 0, "comment", "Мероприятие было удалено."));
     }
 
-    @GetMapping("allEvents")
-    public ResponseEntity<List<EventDto>> getAllEvents(@RequestParam int page, @RequestParam int size) {
+    @GetMapping
+    public ResponseEntity<List<EventDto>> getAllEvents() {
         return ResponseEntity.ok(eventService.getAllEvents());
     }
-
-
-    //todo CRUD
 
 
 

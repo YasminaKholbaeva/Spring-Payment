@@ -43,7 +43,7 @@ public class PaymentServiceImpl implements PaymentService {
         for(Participant participant : participants){
             BigDecimal difference = calculatePaymentDifference(participant, share);
             if(difference.compareTo(BigDecimal.ZERO) > 0){
-                result.add(new Participant(null, participant.getParticipant(), difference, null, null, null));
+                result.add(new Participant(null, participant.getUser(), difference, null, null, null));
             }
         }
         return result;
@@ -54,7 +54,7 @@ public class PaymentServiceImpl implements PaymentService {
         for(Participant participant : participants){
             BigDecimal difference = calculatePaymentDifference(participant, share);
             if(difference.compareTo(BigDecimal.ZERO) < 0){
-                result.add(new Participant(null, participant.getParticipant(), difference, null, null, null));
+                result.add(new Participant(null, participant.getUser(), difference, null, null, null));
             }
         }
         return result;
@@ -89,7 +89,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     private PaymentResultDto getPayment(Participant debtor, Participant creditor, BigDecimal transfer) {
-        var payment = new PaymentResultDto(debtor.getParticipant(), creditor.getParticipant(), transfer);
+        var payment = new PaymentResultDto(debtor.getUser(), creditor.getUser(), transfer);
         return payment;
     }
 

@@ -2,21 +2,26 @@ package com.example.payment.mapper;
 
 import com.example.payment.dto.ParticipantDto;
 import com.example.payment.model.Participant;
-import org.mapstruct.Context;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
 public interface ParticipantMapper {
-    @Mapping(source = "participant.id", target = "participantId")
-    @Mapping(source = "participant.name", target = "name")
-    @Mapping(source = "participant.lastname", target = "lastname")
-    @Mapping(source = "event.id", target = "eventId")
-    ParticipantDto toParticipantDto(Participant participant);
 
-    @Mapping(target = "participant", expression = "java(mapperHelper.findUserById(dto.getParticipantId()))")
-    @Mapping(target = "event", expression = "java(mapperHelper.findEventById(dto.getEventId()))")
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "updatedAt", ignore = true)
-    Participant toParticipant(ParticipantDto dto, @Context ParticipantMapperHelper mapperHelper);
+    @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "event.id", target = "eventId")
+    ParticipantDto toDto(Participant participant);
+
+    @Mapping(target = "user", ignore = true)
+    @Mapping(target = "event", ignore = true)
+    Participant toEntity(ParticipantDto participantDto, @Context ParticipantMappingContext context);
+
+    @AfterMapping
+    default void fillRelations(
+            ParticipantDto participantDto,
+            @MappingTarget Participant entity,
+            @Context ParticipantMappingContext context
+    ) {
+        entity.setUser(context.getUserById(participantDto.getUserId()));
+        entity.setEvent(context.getEventById(participantDto.getEventId()));
+    }
 }

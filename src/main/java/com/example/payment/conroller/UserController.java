@@ -1,11 +1,15 @@
 package com.example.payment.conroller;
 
+import com.example.payment.dto.ParticipantDto;
 import com.example.payment.dto.UserDto;
+import com.example.payment.dto.UserStatisticsDto;
 import com.example.payment.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -29,6 +33,13 @@ public class UserController {
         userService.deleteUser(id);
         return ResponseEntity.ok(Map.of("result", 0, "comment", "The user is deleted from the list and from events"));
     }
+
+    @GetMapping("/{id}/statistics")
+    public ResponseEntity<UserStatisticsDto> getUserStatistics(@PathVariable("id") Integer id) {
+        return ResponseEntity.ok(userService.getUserStatistics(id));
+    }
+
+
 
 
 

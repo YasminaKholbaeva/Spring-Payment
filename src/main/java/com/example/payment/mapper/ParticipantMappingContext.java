@@ -9,16 +9,17 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class ParticipantMapperHelper {
+public class ParticipantMappingContext {
    private final UserRepository userRepository;
    private final EventRepository eventRepository;
 
-    public User findUserById(Integer id) {
+    public User getUserById(Integer id) {
+        if (id == null) throw new IllegalArgumentException("User ID must not be null");
         return userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found: " + id));
     }
 
-    public Event findEventById(Integer id) {
+    public Event getEventById(Integer id) {
         return eventRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Event not found: " + id));
     }
