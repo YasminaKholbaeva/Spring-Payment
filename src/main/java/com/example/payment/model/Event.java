@@ -16,12 +16,6 @@ public class Event {
     @Column(nullable = false, length = 32)
     private String event;
 
-//    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
-//    private List<Participant> participants;
-
-
-
-
 
 
 }

@@ -19,7 +19,7 @@ public class UserController {
     private final UserServiceImpl userService;
 
     @PostMapping
-    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto){
+    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
         return ResponseEntity.ok(userService.createUser(userDto));
     }
 
@@ -38,9 +38,6 @@ public class UserController {
     public ResponseEntity<UserStatisticsDto> getUserStatistics(@PathVariable("id") Integer id) {
         return ResponseEntity.ok(userService.getUserStatistics(id));
     }
-
-
-
 
 
 }

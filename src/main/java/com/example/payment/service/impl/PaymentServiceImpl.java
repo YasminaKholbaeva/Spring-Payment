@@ -18,7 +18,8 @@ import java.util.List;
 public class PaymentServiceImpl implements PaymentService {
     private final ParticipantRepository participantRepository;
 
-    public List<PaymentResultDto> calculate(Integer eventId){
+    @Override
+    public List<PaymentResultDto> calculate(Integer eventId) {
         List<Participant> participants = participantRepository.findByEventId(eventId);
 
         BigDecimal totalPaid = calculateTotalPaid(participants);
@@ -33,45 +34,44 @@ public class PaymentServiceImpl implements PaymentService {
 
     }
 
-    private BigDecimal calculateTotalPaid(List<Participant> participants){
-        return participants.stream().map(participant -> participant.getAmountPaid() != null ? participant.getAmountPaid(): BigDecimal.ZERO)
+    private BigDecimal calculateTotalPaid(List<Participant> participants) {
+        return participants.stream().map(participant -> participant.getAmountPaid() != null ? participant.getAmountPaid() : BigDecimal.ZERO)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    private List<Participant> identifyCreditors(List<Participant> participants, BigDecimal share){
+    private List<Participant> identifyCreditors(List<Participant> participants, BigDecimal share) {
         List<Participant> result = new ArrayList<>();
-        for(Participant participant : participants){
+        for (Participant participant : participants) {
             BigDecimal difference = calculatePaymentDifference(participant, share);
-            if(difference.compareTo(BigDecimal.ZERO) > 0){
+            if (difference.compareTo(BigDecimal.ZERO) > 0) {
                 result.add(new Participant(null, participant.getUser(), difference, null, null, null));
             }
         }
         return result;
     }
 
-    private List<Participant> identifyDebtors(List<Participant> participants, BigDecimal share){
+    private List<Participant> identifyDebtors(List<Participant> participants, BigDecimal share) {
         List<Participant> result = new ArrayList<>();
-        for(Participant participant : participants){
+        for (Participant participant : participants) {
             BigDecimal difference = calculatePaymentDifference(participant, share);
-            if(difference.compareTo(BigDecimal.ZERO) < 0){
-                result.add(new Participant(null, participant.getUser(), difference, null, null, null));
+            if (difference.compareTo(BigDecimal.ZERO) < 0) {
+                result.add(new Participant(null, participant.getUser(), difference.abs(), null, null, null));
             }
         }
         return result;
     }
-
 
 
     private BigDecimal calculatePaymentDifference(Participant participant, BigDecimal share) {
-        BigDecimal paid = participant.getAmountPaid() !=null ? participant.getAmountPaid() : BigDecimal.ZERO;
+        BigDecimal paid = participant.getAmountPaid() != null ? participant.getAmountPaid() : BigDecimal.ZERO;
         return paid.subtract(share);
     }
 
-    private List<PaymentResultDto> matchDebtorsToCreditors(List<Participant> debtors, List<Participant> creditors){
+    private List<PaymentResultDto> matchDebtorsToCreditors(List<Participant> debtors, List<Participant> creditors) {
         List<PaymentResultDto> results = new ArrayList<>();
         int i = 0, j = 0;
 
-        while(i < debtors.size() && j < creditors.size()){
+        while (i < debtors.size() && j < creditors.size()) {
             Participant debtor = debtors.get(i);
             Participant creditor = creditors.get(j);
 
@@ -83,7 +83,7 @@ public class PaymentServiceImpl implements PaymentService {
             creditor.setAmountPaid(creditor.getAmountPaid().subtract(transfer));
 
             if (debtor.getAmountPaid().compareTo(BigDecimal.ZERO) == 0) i++;
-            if(creditor.getAmountPaid().compareTo(BigDecimal.ZERO) == 0) j++;
+            if (creditor.getAmountPaid().compareTo(BigDecimal.ZERO) == 0) j++;
         }
         return results;
     }

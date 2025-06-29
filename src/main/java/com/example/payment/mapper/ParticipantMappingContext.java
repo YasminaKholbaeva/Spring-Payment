@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class ParticipantMappingContext {
-   private final UserRepository userRepository;
-   private final EventRepository eventRepository;
+    private final UserRepository userRepository;
+    private final EventRepository eventRepository;
 
     public User getUserById(Integer id) {
         if (id == null) throw new IllegalArgumentException("User ID must not be null");

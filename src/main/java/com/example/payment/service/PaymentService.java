@@ -9,4 +9,5 @@ import java.util.List;
 public interface PaymentService {
     List<PaymentResultDto> calculate(Integer eventId);
 
+
 }

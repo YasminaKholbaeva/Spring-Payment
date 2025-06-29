@@ -19,9 +19,9 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ParticipantController {
 
-   private final ParticipantServiceImpl participantService;
+    private final ParticipantServiceImpl participantService;
 
-    @PostMapping("{id}/attendee")
+    @PostMapping("/attendee")
     public ResponseEntity<ParticipantDto> addParticipant(@RequestBody ParticipantDto participantDto) {
         System.out.println("OK");
         return ResponseEntity.ok(participantService.addParticipant(participantDto));
@@ -38,7 +38,7 @@ public class ParticipantController {
         return ResponseEntity.ok(Map.of("result", 0, "comment", "Участник был удалён."));
     }
 
-    @GetMapping("/{id}/attendee")
+    @GetMapping("/attendee")
     public ResponseEntity<List<ParticipantDto>> getAllParticipants(@PathVariable("id") Integer eventId) {
         return ResponseEntity.ok(participantService.getAllParticipants(eventId));
     }

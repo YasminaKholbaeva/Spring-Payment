@@ -48,9 +48,11 @@ public class UserServiceImpl implements UserService {
         return userMapper.toUserDto(userRepository.save(user));
     }
 
+
     public void deleteUser(Integer id) {
         userRepository.deleteById(id);
     }
+
     public UserStatisticsDto getUserStatistics(Integer id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -87,13 +89,4 @@ public class UserServiceImpl implements UserService {
 
         return dto;
     }
-
-//        if (id == null) {
-//            throw new IllegalArgumentException("User ID must not be null");
-//        }
-//        User users = userRepository.findById(id).orElseThrow(()-> new RuntimeException("User not found with id: " + id));
-//
-//        return userMapper.toUserDto(users);
-//    }
-
 }
