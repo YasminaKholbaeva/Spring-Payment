@@ -15,30 +15,30 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/event")
+@RequestMapping("/api/v1/participants")
 @RequiredArgsConstructor
 public class ParticipantController {
 
     private final ParticipantServiceImpl participantService;
 
-    @PostMapping("/attendee")
+    @PostMapping
     public ResponseEntity<ParticipantDto> addParticipant(@RequestBody ParticipantDto participantDto) {
         System.out.println("OK");
         return ResponseEntity.ok(participantService.addParticipant(participantDto));
     }
 
-    @PutMapping("{id}/attendee")
+    @PutMapping("{id}")
     public ResponseEntity<ParticipantDto> updateContribution(@RequestBody ParticipantDto participantDto) {
         return ResponseEntity.ok(participantService.updateAmount(participantDto.getEventId(), participantDto.getUserId(), participantDto.getAmountPaid()));
     }
 
-    @DeleteMapping("{id}/attendee")
+    @DeleteMapping("{id}")
     public ResponseEntity<Map<String, Object>> deleteParticipant(@RequestBody ParticipantDto participantDto) {
         participantService.deleteParticipant(participantDto.getEventId(), participantDto.getUserId());
         return ResponseEntity.ok(Map.of("result", 0, "comment", "Участник был удалён."));
     }
 
-    @GetMapping("/attendee")
+    @GetMapping
     public ResponseEntity<List<ParticipantDto>> getAllParticipants(@PathVariable("id") Integer eventId) {
         return ResponseEntity.ok(participantService.getAllParticipants(eventId));
     }
