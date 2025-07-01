@@ -11,6 +11,7 @@ import com.example.payment.repository.ParticipantRepository;
 import com.example.payment.repository.UserRepository;
 import com.example.payment.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -19,6 +20,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -35,6 +38,7 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.toUser(userDto);
         user.setCreatedAt(LocalDateTime.now());
         user.setUpdatedAt(LocalDateTime.now());
+        log.info("User created: {}", user);
         return userMapper.toUserDto(userRepository.save(user));
     }
 
